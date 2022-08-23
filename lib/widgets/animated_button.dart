@@ -70,21 +70,17 @@ class AnimatedButtonState extends State<AnimatedButton>
                 SizedBox(
                   width: isIconVisible ? widget.iconSize - 15 : 0.0,
                 ),
-                getTextWidget()
+                Text(
+                  widget.initialText,
+                  style: (!isIconVisible)
+                      ? widget.buttonStyle.initialTextStyle
+                      : widget.buttonStyle.finalTextStyle,
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget getTextWidget() {
-    return Text(
-      widget.initialText,
-      style: (!isIconVisible)
-          ? widget.buttonStyle.initialTextStyle
-          : widget.buttonStyle.finalTextStyle,
     );
   }
 }
