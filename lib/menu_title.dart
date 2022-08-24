@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:food_down_menu/style.dart';
+import 'package:food_down_menu/style.dart' as styles;
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
-class MenuTitle extends StatelessWidget {
-  const MenuTitle({Key? key}) : super(key: key);
+part 'menu_title.g.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return const Expanded(
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          "Меню",
-          style: TextStyle(color: Colors.blue, fontSize: fontSize + 10),
+@swidget
+Widget menuTitle() {
+  return const Expanded(
+    child: Align(
+      alignment: Alignment.center,
+      child: Text(
+        "Меню",
+        style: TextStyle(
+          color: Colors.blue,
+          fontSize: styles.FontSizes.header,
         ),
       ),
-    );
-  }
+    ),
+  );
 }
+

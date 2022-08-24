@@ -1,101 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
-class AnimatedButton extends StatefulWidget {
-  final String initialText;
-  final AnimatedButtonStyle buttonStyle;
-  final IconData iconData;
-  final double iconSize;
-  final Duration animationDuration;
+part 'animated_button.g.dart';
 
-  const AnimatedButton({
-    Key? key,
-    required this.initialText,
-    required this.iconData,
-    required this.iconSize,
-    required this.animationDuration,
-    required this.buttonStyle,
-  }) : super(key: key);
+@hwidget
+Widget animatedButton({
+  required bool isHovered,
+  required String initialText,
+  required IconData iconData,
+  required double iconSize,
+  required Duration animationDuration,
+  required AnimatedButtonStyle buttonStyle,
+}) {
+  final smallDuration =
+      Duration(milliseconds: (animationDuration.inMilliseconds * 0.2).round());
 
-  @override
-  AnimatedButtonState createState() => AnimatedButtonState();
-}
+  final isSelected = useState(false);
 
-class AnimatedButtonState extends State<AnimatedButton>
-    with TickerProviderStateMixin {
-  bool isIconVisible = false;
+  var backgroundColor = buttonStyle.onHoverColor;
+  if (!isHovered) {
+    (isSelected.value)
+        ? backgroundColor = buttonStyle.secondaryColor
+        : backgroundColor = buttonStyle.primaryColor;
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    final smallDuration = Duration(
-        milliseconds: (widget.animationDuration.inMilliseconds * 0.2).round());
-    return Material(
-      elevation: widget.buttonStyle.elevation,
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            isIconVisible = !isIconVisible;
-          });
-        },
-        child: AnimatedContainer(
+  return Material(
+    child: InkWell(
+      onTap: () {
+        isSelected.value = !isSelected.value;
+      },
+      child: AnimatedContainer(
+        duration: smallDuration,
+        height: iconSize + 16,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: Border.all(color: buttonStyle.primaryColor),
+          borderRadius:
+              BorderRadius.all(Radius.circular(buttonStyle.borderRadius)),
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 5,
+          vertical: 5,
+        ),
+        child: AnimatedSize(
+          curve: Curves.easeIn,
           duration: smallDuration,
-          height: widget.iconSize + 16,
-          decoration: BoxDecoration(
-            color: (isIconVisible)
-                ? widget.buttonStyle.secondaryColor
-                : widget.buttonStyle.primaryColor,
-            border: Border.all(
-                color: (isIconVisible)
-                    ? widget.buttonStyle.primaryColor
-                    : Colors.transparent),
-            borderRadius: BorderRadius.all(
-                Radius.circular(widget.buttonStyle.borderRadius)),
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: widget.iconSize - 5,
-            vertical: widget.iconSize - 20,
-          ),
-          child: AnimatedSize(
-            curve: Curves.easeIn,
-            duration: smallDuration,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                (isIconVisible)
-                    ? Icon(
-                        widget.iconData,
-                        size: widget.iconSize,
-                        color: widget.buttonStyle.iconColor,
-                      )
-                    : Container(),
-                SizedBox(
-                  width: isIconVisible ? widget.iconSize - 15 : 0.0,
-                ),
-                Text(
-                  widget.initialText,
-                  style: (!isIconVisible)
-                      ? widget.buttonStyle.initialTextStyle
-                      : widget.buttonStyle.finalTextStyle,
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              (isSelected.value)
+                  ? Icon(
+                      iconData,
+                      size: iconSize,
+                      color: buttonStyle.iconColor,
+                    )
+                  : const SizedBox.shrink(),
+              SizedBox(
+                width: isSelected.value ? 5 : 0.0,
+              ),
+              Text(initialText, style: buttonStyle.textStyle),
+            ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class AnimatedButtonStyle {
-  final TextStyle initialTextStyle, finalTextStyle;
-  final Color primaryColor, secondaryColor, iconColor;
-  final double elevation, borderRadius;
+  final TextStyle textStyle;
+  final Color primaryColor, secondaryColor, iconColor, onHoverColor;
+  final double borderRadius;
 
   AnimatedButtonStyle(
       {required this.primaryColor,
       required this.secondaryColor,
       required this.iconColor,
-      required this.initialTextStyle,
-      required this.finalTextStyle,
-      required this.elevation,
+      required this.onHoverColor,
+      required this.textStyle,
       required this.borderRadius});
 }

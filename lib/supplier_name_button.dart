@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:food_down_menu/style.dart';
+import 'package:food_down_menu/style.dart' as styles;
 import 'package:food_down_menu/widgets/animated_button.dart';
+import 'package:food_down_menu/widgets/on_hover.dart';
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
-class SupplierNameButton extends StatelessWidget {
-  const SupplierNameButton({Key? key}) : super(key: key);
+part 'supplier_name_button.g.dart';
 
-  @override
-  Widget build(BuildContext context) {
+@swidget
+Widget supplierNameButton() {
+  return OnHover((isHovered) {
     return AnimatedButton(
+      isHovered: isHovered,
       animationDuration: const Duration(milliseconds: 500),
       initialText: "supplier name",
       iconData: Icons.check,
-      iconSize: fontSize,
+      iconSize: styles.FontSizes.small,
       buttonStyle: AnimatedButtonStyle(
-        primaryColor: const Color.fromARGB(157, 186, 186, 186),
-        secondaryColor: const Color.fromARGB(183, 179, 194, 219),
-        iconColor: const Color.fromARGB(255, 5, 99, 175),
-        elevation: 0,
-        initialTextStyle: const TextStyle(
-          fontSize: fontSize,
-          color: Color.fromARGB(255, 73, 73, 73),
-        ),
-        finalTextStyle: const TextStyle(
-          fontSize: fontSize,
-          color: Color.fromARGB(255, 73, 73, 73),
+        primaryColor: styles.Colors.darkGrey,
+        secondaryColor: styles.Colors.grey,
+        iconColor: styles.Colors.blue,
+        onHoverColor: styles.Colors.lightGrey,
+        textStyle: const TextStyle(
+          fontSize: styles.FontSizes.small,
+          color: styles.Colors.textBlack,
         ),
         borderRadius: 30.0,
       ),
     );
-  }
+  });
 }

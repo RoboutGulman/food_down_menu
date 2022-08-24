@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:food_down_menu/style.dart';
+import 'package:food_down_menu/style.dart' as styles;
+import 'package:food_down_menu/widgets/elevated_button.dart' as widgets;
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
-class LuckyButton extends StatelessWidget {
-  const LuckyButton({Key? key}) : super(key: key);
+part 'lucky_button.g.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: barHeight,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromARGB(255, 31, 173, 208))),
-        onPressed: () {},
-        child: const Text(
-          'Мне повезёт!',
-          style: TextStyle(color: Colors.white, fontSize: fontSize),
-        ),
-      ),
-    );
-  }
+@swidget
+Widget luckyButton() {
+  return const widgets.ElevatedButton(
+    backgroundColor: styles.Colors.turquoise,
+    content: 'Мне повезёт!',
+    textStyle: TextStyle(
+      color: Colors.white,
+      fontSize: styles.FontSizes.small,
+    ),
+  );
 }
